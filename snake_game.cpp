@@ -179,7 +179,7 @@ private:
         specialFoodExists = false;
 
         if (difficulty >= 3) {
-            int numObstacles = (difficulty == 3) ? 10 : (difficulty == 4) ? 20 : 0;
+            int numObstacles = (difficulty == 3) ? height/5 : (difficulty == 4) ? height/2 : 0;
             for (int i = 0; i < numObstacles; ++i) {
                 obstacles.push_back({rand() % height, rand() % width});
             }
@@ -260,14 +260,18 @@ private:
         cout << "Use W/A/S/D to move. Press X to quit. Press R to restart. Press I to show Instructions" << endl;
     }
 
-    void setTerminalRawMode(bool enable) {
+    void setTerminalRawMode(bool enable) 
+    {
         static struct termios oldt, newt;
-        if (enable) {
+        if (enable) 
+        {
             tcgetattr(STDIN_FILENO, &oldt);
             newt = oldt;
             newt.c_lflag &= static_cast<tcflag_t>(~(ICANON | ECHO));
             tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-        } else {
+        } 
+        else 
+        {
             tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
         }
     }
@@ -293,13 +297,21 @@ private:
             char key = getch();
             if (difficulty == 6) {
                 switch (key) {
-                case 'w': dir = LEFT; break;
-                case 'a': dir = DOWN; break;
-                case 's': dir = RIGHT; break;
-                case 'd': dir = UP; break;
                 case 'x': exit(0);
                 case 'r': initialize(); break;
                 case 'i': showInstructions(); break;
+                case 'w':
+                case 'a':
+                case 's':
+                case 'd':
+                    int randomDir = rand() % 4;
+                    switch (randomDir) {
+                    case 0: dir = UP; break;
+                    case 1: dir = LEFT; break;
+                    case 2: dir = DOWN; break;
+                    case 3: dir = RIGHT; break;
+                    }
+                    break;
                 }
             } else {
                 switch (key) {
@@ -453,7 +465,7 @@ private:
             case 3: return 50000;
             case 4: return 50000;
             case 5: return 30000;
-            case 6: return 50000;
+            case 6: return 120000;
             default: return 100000;
         }
     }
