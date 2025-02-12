@@ -585,8 +585,8 @@ private:
             case 2: return 80000;  // Rookie
             case 3: return 60000;  // Elite
             case 4: return 40000;  // Pro
-            case 5: return 20000;  // Sigma
-            case 6: return 10000;  // Pro Sigma
+            case 5: return 50000;  // Sigma
+            case 6: return 50000;  // Pro Sigma
             default: return 100000; // Default case
         }
     }
