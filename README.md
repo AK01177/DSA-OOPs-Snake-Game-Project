@@ -70,7 +70,6 @@ A terminal-based Snake Game with customizable settings and multiple difficulty l
 ## 📚 Data Structure Analysis
 
 - 🗂️ **Arrays:** Used for storing the snake's body coordinates.
-- 🔄 **Queues:** Helps in maintaining movement direction history.
 - 📦 **Structs:** Defines food and obstacle properties.
 - 🔗 **Linked Lists:** Can be used to dynamically manage snake growth.
 - 📊 **2D Arrays:** Represents the game board efficiently.
