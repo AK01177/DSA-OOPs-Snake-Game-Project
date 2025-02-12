@@ -1,75 +1,70 @@
-// Include necessary headers
-#include <iostream>
-#include <termios.h>
-#include <unistd.h>
-#include <list>
-#include <vector>
-#include <string>
-#include <cstdlib>
-#include <ctime>
+#include <iostream> // Include input-output stream library
+#include <termios.h> // Include terminal I/O library
+#include <unistd.h> // Include POSIX operating system API
+#include <list> // Include list container
+#include <vector> // Include vector container
+#include <string> // Include string library
+#include <cstdlib> // Include C standard library
+#include <ctime> // Include time library
 
-// Use the standard namespace
-using namespace std;
+using namespace std; // Use the standard namespace
 
-// Define the possible directions for the snake
+// Define directions for snake movement
 enum Direction { STOP, LEFT, RIGHT, UP, DOWN };
 
-// Define the SnakeGame class
 class SnakeGame {
 public:
-    // Constructor to initialize the game
-    SnakeGame() : dir(STOP), specialFoodExists(false), diff(1), w(20), h(10) {
+    // Constructor to initialize game variables
+    SnakeGame() : dir(STOP), specialFoodExists(false), difficulty(1), width(20), height(10) {
         srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
     }
 
     // Function to run the game
     void run() {
-        showStartingAnimation(); // Show the starting animation
+        showStartingAnimation(); // Show starting animation
         setMapSize(); // Set the map size
         setDifficulty(); // Set the difficulty level
         chooseSnakeType(); // Choose the snake type
         chooseFoodType(); // Choose the food type
-        showMapAnimation(); // Show the map animation
+        showMapAnimation(); // Show map animation
         initialize(); // Initialize the game
-        setTerminalRawMode(true); // Set the terminal to raw mode
+        setTerminalRawMode(true); // Set terminal to raw mode
 
-        int sleepDur = getSleepDuration(); // Get the sleep duration based on difficulty
+        int sleepDuration = getSleepDuration(); // Get sleep duration based on difficulty
 
         while (true) {
             draw(); // Draw the game
             input(); // Handle user input
             update(); // Update the game state
-            usleep(sleepDur); // Sleep for the specified duration
+            usleep(sleepDuration); // Sleep for a duration
         }
 
-        setTerminalRawMode(false); // Reset the terminal mode
+        setTerminalRawMode(false); // Reset terminal mode
     }
 
 private:
-    // Define a structure for positions
-    struct Pos {
-        int x, y;
+    struct Position {
+        int x, y; // Position coordinates
     };
-
     Direction dir; // Current direction of the snake
-    list<Pos> snake; // List of positions representing the snake
-    Pos food; // Position of the food
-    Pos specialFood; // Position of the special food
+    list<Position> snake; // List to store snake positions
+    Position food; // Position of the food
+    Position specialFood; // Position of the special food
     bool specialFoodExists; // Flag to check if special food exists
-    string specialFoodChar = "\033[48;5;82mS\033[0m"; // Character for special food
-    vector<Pos> obstacles; // Vector of positions representing obstacles
-    int diff; // Difficulty level
-    int w; // Width of the map
-    int h; // Height of the map
-    string snakeChar; // Character for the snake
-    string foodChar; // Character for the food
+    string specialFoodChar = "\033[48;5;82mS\033[0m"; // Special food character
+    vector<Position> obstacles; // Vector to store obstacle positions
+    int difficulty; // Difficulty level
+    int width; // Width of the map
+    int height; // Height of the map
+    string snakeChar; // Snake character
+    string foodChar; // Food character
 
     // Function to set the map size
     void setMapSize() {
         cout << "Enter the width of the map: ";
-        cin >> w;
+        cin >> width;
         cout << "Enter the height(width/2 for square shape) of the map: ";
-        cin >> h;
+        cin >> height;
     }
 
     // Function to set the difficulty level
@@ -82,7 +77,7 @@ private:
         cout << "5. Sigma" << endl;
         cout << "6. Pro Sigma" << endl;
         cout << "Enter your choice: ";
-        cin >> diff;
+        cin >> difficulty;
     }
 
     // Function to choose the snake type
@@ -129,21 +124,21 @@ private:
 
     // Function to generate food at a random position
     void generateFood() {
-        bool validPos = false;
-        while (!validPos) {
-            food = {rand() % h, rand() % w};
-            validPos = true;
+        bool validPosition = false;
+        while (!validPosition) {
+            food = {rand() % height, rand() % width};
+            validPosition = true;
 
             for (auto part : snake) {
                 if (food.x == part.x && food.y == part.y) {
-                    validPos = false;
+                    validPosition = false;
                     break;
                 }
             }
 
-            for (auto obs : obstacles) {
-                if (food.x == obs.x && food.y == obs.y) {
-                    validPos = false;
+            for (auto obstacle : obstacles) {
+                if (food.x == obstacle.x && food.y == obstacle.y) {
+                    validPosition = false;
                     break;
                 }
             }
@@ -152,27 +147,27 @@ private:
 
     // Function to generate special food at a random position
     void generateSpecialFood() {
-        bool validPos = false;
-        while (!validPos) {
-            specialFood = {rand() % h, rand() % w};
-            validPos = true;
+        bool validPosition = false;
+        while (!validPosition) {
+            specialFood = {rand() % height, rand() % width};
+            validPosition = true;
 
             for (auto part : snake) {
                 if (specialFood.x == part.x && specialFood.y == part.y) {
-                    validPos = false;
+                    validPosition = false;
                     break;
                 }
             }
 
-            for (auto obs : obstacles) {
-                if (specialFood.x == obs.x && specialFood.y == obs.y) {
-                    validPos = false;
+            for (auto obstacle : obstacles) {
+                if (specialFood.x == obstacle.x && specialFood.y == obstacle.y) {
+                    validPosition = false;
                     break;
                 }
             }
 
             if (specialFood.x == food.x && specialFood.y == food.y) {
-                validPos = false;
+                validPosition = false;
             }
         }
         specialFoodExists = true;
@@ -182,14 +177,14 @@ private:
     void initialize() {
         dir = STOP;
         snake.clear();
-        snake.push_back({h / 2, w / 2});
+        snake.push_back({height / 2, width / 2});
         obstacles.clear();
         specialFoodExists = false;
 
-        if (diff >= 3) {
-            int numObs = (diff == 3) ? h / 5 : (diff == 4) ? h / 2 : 0;
-            for (int i = 0; i < numObs; ++i) {
-                obstacles.push_back({rand() % h, rand() % w});
+        if (difficulty >= 3) {
+            int numObstacles = (difficulty == 3) ? height / 5 : (difficulty == 4) ? height / 2 : 0;
+            for (int i = 0; i < numObstacles; ++i) {
+                obstacles.push_back({rand() % height, rand() % width});
             }
         }
         generateFood();
@@ -198,13 +193,13 @@ private:
     // Function to draw the game
     void draw() {
         system("clear");
-        for (int i = 0; i < h + 2; ++i) {
-            for (int j = 0; j < w + 2; ++j) {
-                if (i == 0 || i == h + 1) {
+        for (int i = 0; i < height + 2; ++i) {
+            for (int j = 0; i < width + 2; ++j) {
+                if (i == 0 || i == height + 1) {
                     cout << "#";
-                } else if (j == 0 || j == w + 1) {
+                } else if (j == 0 || j == width + 1) {
                     cout << "#";
-                } else if (diff == 1) {
+                } else if (difficulty == 1) {
                     cout << "Error Found : NOOB!!" << endl;
                     bool isFood = false;
                     if (isFood);
@@ -219,14 +214,14 @@ private:
                         if (isSnake) {
                             cout << snakeChar;
                         } else {
-                            bool isObs = false;
-                            for (auto obs : obstacles) {
-                                if (obs.x == i && obs.y == j) {
-                                    isObs = true;
+                            bool isObstacle = false;
+                            for (auto obstacle : obstacles) {
+                                if (obstacle.x == i && obstacle.y == j) {
+                                    isObstacle = true;
                                     break;
                                 }
                             }
-                            if (isObs) {
+                            if (isObstacle) {
                                 cout << "\033[45m \033[0m";
                             } else {
                                 cout << " ";
@@ -248,14 +243,14 @@ private:
                     if (isSnake) {
                         cout << snakeChar;
                     } else {
-                        bool isObs = false;
-                        for (auto obs : obstacles) {
-                            if (obs.x == i && obs.y == j) {
-                                isObs = true;
+                        bool isObstacle = false;
+                        for (auto obstacle : obstacles) {
+                            if (obstacle.x == i && obstacle.y == j) {
+                                isObstacle = true;
                                 break;
                             }
                         }
-                        if (isObs) {
+                        if (isObstacle) {
                             cout << "\033[45m \033[0m";
                         } else {
                             cout << " ";
@@ -269,7 +264,7 @@ private:
         cout << "Use W/A/S/D to move. Press X to quit. Press R to restart. Press I to show Instructions" << endl;
     }
 
-    // Function to set the terminal to raw mode
+    // Function to set terminal to raw mode
     void setTerminalRawMode(bool enable) {
         static struct termios oldt, newt;
         if (enable) {
@@ -282,7 +277,7 @@ private:
         }
     }
 
-    // Function to check if a key has been pressed
+    // Function to check if a key is pressed
     bool kbhit() {
         struct timeval tv = { 0L, 0L };
         fd_set fds;
@@ -304,7 +299,7 @@ private:
     void input() {
         if (kbhit()) {
             char key = getch();
-            if (diff == 6) {
+            if (difficulty == 6) {
                 switch (key) {
                 case 'x': exit(0);
                 case 'r': initialize(); break;
@@ -338,7 +333,7 @@ private:
 
     // Function to update the game state
     void update() {
-        Pos head = snake.front();
+        Position head = snake.front();
         switch (dir) {
         case UP: head.x--; break;
         case DOWN: head.x++; break;
@@ -347,13 +342,13 @@ private:
         default: return;
         }
 
-        if (diff == 2 || diff == 3 || diff == 6) { 
-            if (head.x <= 0) head.x = h;
-            else if (head.x >= h + 1) head.x = 1;
-            if (head.y <= 0) head.y = w;
-            else if (head.y >= w + 1) head.y = 1;
+        if (difficulty == 2 || difficulty == 3 || difficulty == 6) { 
+            if (head.x <= 0) head.x = height;
+            else if (head.x >= height + 1) head.x = 1;
+            if (head.y <= 0) head.y = width;
+            else if (head.y >= width + 1) head.y = 1;
         } else {
-            if (head.x <= 0 || head.x >= h + 1 || head.y <= 0 || head.y >= w + 1) {
+            if (head.x <= 0 || head.x >= height + 1 || head.y <= 0 || head.y >= width + 1) {
                 cout << "Game Over! Final Score: " << snake.size() - 1 << endl;
                 exit(0);
             }
@@ -366,8 +361,8 @@ private:
             }
         }
 
-        for (auto obs : obstacles) {
-            if (head.x == obs.x && head.y == obs.y) {
+        for (auto obstacle : obstacles) {
+            if (head.x == obstacle.x && head.y == obstacle.y) {
                 cout << "Game Over! Final Score: " << snake.size() - 1 << endl;
                 exit(0);
             }
@@ -385,18 +380,18 @@ private:
             snake.pop_back();
         }
 
-        if (diff == 4) { 
-            for (auto& obs : obstacles) {
-                int moveDir = rand() % 4;
-                switch (moveDir) {
-                case 0: if (obs.x > 1) obs.x--; break;
-                case 1: if (obs.x < h) obs.x++; break; 
-                case 2: if (obs.y > 1) obs.y--; break; 
-                case 3: if (obs.y < w) obs.y++; break; 
+        if (difficulty == 4) { 
+            for (auto& obstacle : obstacles) {
+                int moveDirection = rand() % 4;
+                switch (moveDirection) {
+                case 0: if (obstacle.x > 1) obstacle.x--; break;
+                case 1: if (obstacle.x < height) obstacle.x++; break; 
+                case 2: if (obstacle.y > 1) obstacle.y--; break; 
+                case 3: if (obstacle.y < width) obstacle.y++; break; 
                 }
             }
         }
-        if (diff == 5) {
+        if (difficulty == 5) {
             switch (dir) {
                 case STOP: break;
             case UP: food.x = head.x - 2; food.y = head.y; break;
@@ -405,27 +400,27 @@ private:
             case RIGHT: food.x = head.x; food.y = head.y + 2; break;
             }
         }
-        if (diff == 6) { 
+        if (difficulty == 6) { 
             if (abs(head.x - food.x) <= 5 && abs(head.y - food.y) <= 5) {
                 generateFood();
             }
         }
 
-        if (diff >= 1 && diff <= 4 && !specialFoodExists && rand() % 100 < 1) { 
+        if (difficulty >= 1 && difficulty <= 4 && !specialFoodExists && rand() % 100 < 1) { 
             generateSpecialFood();
         }
-        if (diff == 3 && snake.size() == 5) {
+        if (difficulty == 3 && snake.size() == 5) {
             cout << "\033[44mAccessing DAIICT servers...Exit the terminal otherwise it will not good for you\033[0m" << endl;
             usleep(200000); 
             system("clear");
         }
     }
 
-    // Function to show the starting animation
+    // Function to show starting animation
     void showStartingAnimation() {
         system("clear");
         string text = "SNAKE GAME";
-        string displayText = "               ";
+        string displayText = "          ";
         for (int i = 0; i < 10; ++i) {
             displayText[i] = text[i];
             system("clear");
@@ -441,16 +436,16 @@ private:
         }
     }
 
-    // Function to show the map animation
+    // Function to show map animation
     void showMapAnimation() {
         system("clear");
-        for (int i = h; i >= 0; --i) {
+        for (int i = height; i >= 0; --i) {
             system("clear");
-            for (int j = 0; j < h + 2; ++j) {
-                for (int k = 0; k < w + 2; ++k) {
-                    if (j == 0 || j == h + 1) {
+            for (int j = 0; j < height + 2; ++j) {
+                for (int k = 0; k < width + 2; ++k) {
+                    if (j == 0 || j == height + 1) {
                         cout << "#";
-                    } else if (k == 0 || k == w + 1) {
+                    } else if (k == 0 || k == width + 1) {
                         cout << "#";
                     } else if (j == i) {
                         cout << snakeChar;
@@ -464,9 +459,9 @@ private:
         }
     }
 
-    // Function to get the sleep duration based on difficulty
+    // Function to get sleep duration based on difficulty
     int getSleepDuration() {
-        switch (diff) {
+        switch (difficulty) {
             case 2: return 100000;
             case 3: return 50000;
             case 4: return 50000;
@@ -476,12 +471,12 @@ private:
         }
     }
 
-    // Function to show the game instructions
+    // Function to show game instructions
     void showInstructions() {
         system("clear");
         cout << "Game Instructions:" << endl;
         cout << "Difficulty Level: ";
-        switch (diff) {
+        switch (difficulty) {
             case 1:
                 cout << "Noob" << endl;
                 cout << "This is not your cup of tea Kid" << endl;
@@ -509,16 +504,15 @@ private:
         }
         cout << "Snake Color: " << snakeChar << endl;
         cout << "Food Color: " << foodChar << endl;
-        cout << "Map Size: " << w << "x" << h << endl;
+        cout << "Map Size: " << width << "x" << height << endl;
         cout << "Use W/A/S/D to move. Press X to quit. Press R to restart." << endl;
         cout << "Press any key to return to the game." << endl;
         getch();
     }
 };
 
-// Main function to start the game
 int main() {
     SnakeGame game; // Create a SnakeGame object
     game.run(); // Run the game
-    return 0; // Return 0 to indicate successful execution
+    return 0;
 }
