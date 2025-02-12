@@ -58,14 +58,14 @@ A terminal-based Snake Game with customizable settings and multiple difficulty l
 
 ## ⚡ Difficulty Levels
 
-| Level         | Features                                      |
-| ------------- | --------------------------------------------- |
-| 🟢 Noob      | Error-prone, not recommended. 🚧              |
-| 🟡 Rookie    | Standard gameplay with normal speed. 🏃       |
-| 🔵 Elite     | Includes obstacles, increased speed. 🚀       |
-| 🔴 Pro       | Moving obstacles, requires quick reflexes. 🎯 |
-| 🟣 Sigma     | Dynamic food movement, challenging. 💨        |
-| ⚫ Pro Sigma | Random direction shifts, extremely hard. 💀   |
+| Level         | Features                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| 🟢 Noob      | Error-prone, not recommended. 🚧                                     |
+| 🟡 Rookie    | Standard gameplay with normal speed and pass through walls. 🏃       |
+| 🔵 Elite     | Includes obstacles, increased speed and pass through walls. 🚀       |
+| 🔴 Pro       | Moving obstacles, requires quick reflexes. 🎯                        |
+| 🟣 Sigma     | Dynamic food movement, challenging. 💨                               |
+| ⚫ Pro Sigma | Random direction shifts, extremely hard. 💀                          |
 
 ## 📚 Data Structure Analysis
 
@@ -88,6 +88,13 @@ Feel free to contribute by:
 - 🎮 Improving game mechanics
 
 Fork the repository, create a branch, and submit a pull request! 🚀
+
+### Contributors
+- [Aryan Ranavat](https://github.com/AK01177)
+- [Varshil Shah](https://github.com/svarshil56)
+- [Yash Agarwal](https://github.com/YashAgarwalDAU)
+- [Hari Sharma](https://github.com/https-hari)
+
 
 ## 📜 License
 
