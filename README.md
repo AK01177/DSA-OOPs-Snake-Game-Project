@@ -77,8 +77,6 @@ A terminal-based Snake Game with customizable settings and multiple difficulty l
 ## 👨‍💻 Object-Oriented Programming (OOPs)
 
 - 🔒 **Encapsulation:** Game elements like snake, food, and obstacles are encapsulated in classes.
-- 🏗️ **Inheritance:** Specialized game components derive from base classes.
-- 🎭 **Polymorphism:** Different food types and obstacles behave uniquely while following a common interface.
 - 📂 **Abstraction:** Hides complex game logic behind simple interfaces.
 
 ## 🤝 Contributions
