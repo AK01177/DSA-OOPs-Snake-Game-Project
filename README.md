@@ -1,128 +1,101 @@
-Here’s what the functions and header files do in your Snake Game code:
+# 🐍 Snake Game 🎮
+
+A terminal-based Snake Game with customizable settings and multiple difficulty levels. The game features various snake and food types, as well as special foods and obstacles, making the gameplay dynamic and challenging. 🚀
+
+## ⭐ Features
+
+- **🎨 Customizable Map Size**: Set the width and height of the game area.
+- **🔥 Multiple Difficulty Levels**: Choose from six difficulty levels: Noob, Rookie, Elite, Pro, Sigma, and Pro Sigma.
+- **🐍 Custom Snake and Food Types**: Select different colors and styles for your snake and food.
+- **🍏 Special Food**: Occasionally appears and grants additional benefits.
+- **🚧 Obstacles**: Adds complexity and challenge to the game.
+- **🎬 Animated Start and Map Loading**: A visually appealing introduction to the game.
+- **🕹️ Classic Snake Mechanics**: Move around, eat food, and grow your snake.
+- **🌍 Wall-Wrapping Mode**: Enabled on certain difficulty levels.
+
+## 🎮 Controls
+
+- `W` - ⬆️ Move Up
+- `A` - ⬅️ Move Left
+- `S` - ⬇️ Move Down
+- `D` - ➡️ Move Right
+- `X` - ❌ Exit the Game
+- `R` - 🔄 Restart the Game
+- `I` - ℹ️ Show Instructions
+
+## 🛠️ Installation and Execution (Linux Only 🐧)
+
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/yourusername/snake-game.git
+   cd snake-game
+   ```
+2. **Install Dependencies (if needed):**
+   ```sh
+   sudo apt update && sudo apt install g++
+   ```
+3. **Compile the Code:**
+   ```sh
+   g++ snake_game.cpp -o snake_game
+   ```
+4. **Run the Game:**
+   ```sh
+   ./snake_game
+   ```
+
+## 📋 Requirements
+
+- A C++ compiler (g++ recommended)
+- A Linux terminal that supports ANSI escape codes for colored output 🎨
+
+## 🎯 How to Play
+
+1. Start the game and configure the map size. 📏
+2. Select the difficulty level and snake/food type. 🎨
+3. Navigate the snake to eat food while avoiding obstacles and itself. 🐍
+4. Special food grants extra benefits when eaten. 🍏✨
+5. Survive as long as possible and achieve the highest score! 🏆
+
+## ⚡ Difficulty Levels
+
+| Level         | Features                                      |
+| ------------- | --------------------------------------------- |
+| 🟢 Noob      | Error-prone, not recommended. 🚧              |
+| 🟡 Rookie    | Standard gameplay with normal speed. 🏃       |
+| 🔵 Elite     | Includes obstacles, increased speed. 🚀       |
+| 🔴 Pro       | Moving obstacles, requires quick reflexes. 🎯 |
+| 🟣 Sigma     | Dynamic food movement, challenging. 💨        |
+| ⚫ Pro Sigma | Random direction shifts, extremely hard. 💀   |
+
+## 📚 Data Structure Analysis
+
+- 🗂️ **Arrays:** Used for storing the snake's body coordinates.
+- 🔄 **Queues:** Helps in maintaining movement direction history.
+- 📦 **Structs:** Defines food and obstacle properties.
+- 🔗 **Linked Lists:** Can be used to dynamically manage snake growth.
+- 📊 **2D Arrays:** Represents the game board efficiently.
+
+## 👨‍💻 Object-Oriented Programming (OOPs)
+
+- 🔒 **Encapsulation:** Game elements like snake, food, and obstacles are encapsulated in classes.
+- 🏗️ **Inheritance:** Specialized game components derive from base classes.
+- 🎭 **Polymorphism:** Different food types and obstacles behave uniquely while following a common interface.
+- 📂 **Abstraction:** Hides complex game logic behind simple interfaces.
+
+## 🤝 Contributions
+
+Feel free to contribute by:
+
+- 🐛 Fixing bugs
+- 🆕 Adding new features
+- 🎮 Improving game mechanics
+
+Fork the repository, create a branch, and submit a pull request! 🚀
+
+## 📜 License
+
+This project is open-source and available under the MIT License.
 
 ---
 
-Header Files and Their Purpose
-
-1. #include <iostream>
-Used for input (cin) and output (cout).
-
-2. #include <termios.h>
-Used to control terminal settings, such as enabling/disabling raw mode for real-time input.
-
-3. #include <unistd.h>
-Provides system-related calls, such as usleep() (to introduce delays).
-
-4. #include <list>
-Used to store the snake’s body segments dynamically as a list of positions.
-
-5. #include <vector>
-Used to store obstacles dynamically.
-
-6. #include <string>
-Used for string manipulation (e.g., storing snake and food colors).
-
-7. #include <cstdlib>
-Used for generating random numbers (rand()).
-
-8. #include <ctime>
-Used to seed the random number generator (srand(time(0))).
-
----
-
-Functions and Their Purpose
-
-1. run()
-
-Starts the game.
-Calls setup functions (showStartingAnimation(), setMapSize(), setDifficulty(), chooseSnakeType(), chooseFoodType()).
-Initializes game settings and enters the main game loop (draw(), input(), update()).
-
-2. setMapSize()
-Allows the user to define the game’s width and height.
-
-3. setDifficulty()
-Allows the user to select difficulty, affecting gameplay mechanics.
-
-4. chooseSnakeType()
-Lets the user pick a snake appearance (colored blocks).
-
-5. chooseFoodType()
-Lets the user pick food appearance (colored blocks).
-
-6. generateFood()
-Randomly places food on the map while ensuring it doesn’t overlap with obstacles or the snake.
-
-7. generateSpecialFood()
-Randomly places special food with similar constraints as generateFood().
-
-8. initialize()
-
-Resets game variables.
-Places the snake in the center of the map.
-Generates obstacles (if difficulty is high).
-Calls generateFood().
-
-9. draw()
-
-Renders the game map with:
-
-Snake (snakeChar)
-Food (foodChar)
-Obstacles (vector<Position> obstacles)
-Uses ANSI escape sequences for color formatting.
-
-10. setTerminalRawMode(bool enable)
-Enables/disables raw mode for real-time keyboard input.
-
-11. kbhit()
-Checks if a key was pressed without blocking execution.
-
-12. getch()
-Reads a single character from input without requiring Enter key.
-
-13. input()
-Detects user input (WASD for movement, X for exit, R for reset).
-
-14. update()
-Moves the snake.
-Handles collisions (walls, self, obstacles).
-Checks food consumption.
-Implements special effects based on difficulty.
-
-5. showStartingAnimation()
-Displays an animated title screen.
-
-16. showMapAnimation()
-Animates the map before starting the game.
-
-17. getSleepDuration()
-Returns sleep duration (affects game speed) based on difficulty.
-
-18. showInstructions()
-Displays difficulty-specific instructions and controls.
-
-19. main()
-Creates an instance of SnakeGame and starts the game.
-
----
-
-Additional Notes
-
-Game Speed: Controlled by usleep(getSleepDuration()).
-
-Collision Handling: Checks for self-collision, wall collision, and obstacle collision.
-
-Difficulty Modifiers:
-
-Noob (1): Displays error.
-
-Rookie (2): Snake wraps around edges.
-
-Elite (3): More obstacles.
-
-Pro (4): Moving obstacles.
-
-Sigma (5): Food moves based on snake direction.
-
-Pro Sigma (6): Special difficulty settings.
+Enjoy the game! Have fun avoiding obstacles and chasing food! 🎉🐍
