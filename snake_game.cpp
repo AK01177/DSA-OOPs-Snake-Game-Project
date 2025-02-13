@@ -17,13 +17,13 @@ public:
     // Constructor to initialize game variables
     SnakeGame() : dir(STOP), specialFoodExists(false), difficulty(2), width(20), height(10)
     {
-        srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+        srand((time(NULL))); // Seed the random number generator
     }
 
     // Function to run the game
     void run() 
     {
-        showStartingAnimation(); // Show starting animation
+        showStartingAnimation(); // Show stsarting animation
         setMapSize(); // Set the map size
         setDifficulty(); // Set the difficulty level
         chooseSnakeType(); // Choose the snake type
@@ -94,18 +94,18 @@ private:
         cout << "2. Green Block" << endl;
         cout << "3. Yellow Block" << endl;
         cout << "4. Red Block" << endl;
-        cout << "5. Purple Block" << endl;
+        cout << "5. White Block" << endl;
         cout << "Enter your choice: ";
         int choice;
         cin >> choice;
         switch (choice) 
         {
-            case 1: snakeChar = "\033[44mB\033[0m"; break;
-            case 2: snakeChar = "\033[42mG\033[0m"; break;
-            case 3: snakeChar = "\033[43mY\033[0m"; break;
-            case 4: snakeChar = "\033[41mR\033[0m"; break;
-            case 5: snakeChar = "\033[45mP\033[0m"; break;
-            default: snakeChar = "\033[44m \033[0m"; break;
+            case 1: snakeChar = "\033[44mS\033[0m"; break;
+            case 2: snakeChar = "\033[42mS\033[0m"; break;
+            case 3: snakeChar = "\033[43mS\033[0m"; break;
+            case 4: snakeChar = "\033[41mS\033[0m"; break;
+            case 5: snakeChar = "\033[47mS\033[0m"; break;
+            default: snakeChar = "\033[44mS\033[0m"; break;
         }
     }
 
@@ -116,19 +116,19 @@ private:
         cout << "1. Red Block" << endl;
         cout << "2. White Block" << endl;
         cout << "3. Cyan Block" << endl;
-        cout << "4. Magenta Block" << endl;
+        cout << "4. Blue Block" << endl;
         cout << "5. Yellow Block" << endl;
         cout << "Enter your choice: ";
         int choice;
         cin >> choice;
         switch (choice)
         {
-            case 1: foodChar = "\033[48;5;196mR\033[0m"; break;
-            case 2: foodChar = "\033[47mW\033[0m"; break;
-            case 3: foodChar = "\033[46mC\033[0m"; break;
-            case 4: foodChar = "\033[48;5;201mM\033[0m"; break;
-            case 5: foodChar = "\033[48;5;226mY\033[0m"; break;
-            default: foodChar = "\033[41mR\033[0m"; break;
+            case 1: foodChar = "\033[48;5;196mF\033[0m"; break;
+            case 2: foodChar = "\033[47mF\033[0m"; break;
+            case 3: foodChar = "\033[46mF\033[0m"; break;
+            case 4: foodChar = "\033[44mF\033[0m"; break;
+            case 5: foodChar = "\033[48;5;226mF\033[0m"; break;
+            default: foodChar = "\033[41mF\033[0m"; break;
         }
     }
 
@@ -328,17 +328,15 @@ private:
     // Function to set terminal to raw mode
     void setTerminalRawMode(bool enable) 
     {
-        static struct termios oldt, newt;
+        static struct termios oldt, newt; // Declare old and new terminal settings
         if (enable) 
         {
-            tcgetattr(STDIN_FILENO, &oldt);
-            newt = oldt;
-            newt.c_lflag &= static_cast<tcflag_t>(~(ICANON | ECHO));
-            tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-        } 
-        else 
-        {
-            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+            tcgetattr(STDIN_FILENO, &oldt); // Get current terminal settings
+            newt = oldt; // Copy current settings to new settings
+            newt.c_lflag &= static_cast<tcflag_t>(~(ICANON | ECHO)); // Disable canonical mode and echo
+            tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Apply new settings immediately
+        } else {
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Restore old settings immediately
         }
     }
 
@@ -504,13 +502,13 @@ private:
             }
         }
 
-        if (difficulty >= 1 && difficulty <= 4 && !specialFoodExists && rand() % 100 < 1) 
+        if (difficulty >= 1 && difficulty <= 4 && !specialFoodExists && rand() % 100 < 5) 
         { 
             generateSpecialFood();
         }
         if (difficulty == 3 && snake.size() == 5) 
         {
-            cout << "\033[44mAccessing DAIICT servers...Exit the terminal otherwise it will not good for you\033[0m" << endl;
+            cout << "\033[44mAccessing DAIICT servers...Exit the terminal otherwise it will not be good for you\033[0m" << endl;
             usleep(200000); 
             system("clear");
         }
